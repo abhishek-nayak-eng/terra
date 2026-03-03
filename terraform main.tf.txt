@@ -1,0 +1,37 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+}
+
+provider "aws" {
+  region = "ap-south-1"
+}
+
+
+
+
+resource "aws_instance" "ec2" {
+  ami           = "ami-0f5ee92e2d63afc18"
+  instance_type = "t3.micro"
+
+  tags = {
+    Name = "abhishek-nador-ec2"
+  }
+}
+
+
+resource "aws_s3_bucket" "bucket" {
+  bucket = "abhishek-nador-unique-12345"
+}
+
+resource "aws_s3_bucket_ownership_controls" "bucket_ownership" {
+  bucket = aws_s3_bucket.bucket.id
+
+  rule {
+    object_ownership = "BucketOwnerEnforced"
+  }
+}
